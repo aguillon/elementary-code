@@ -179,7 +179,11 @@ namespace Scratch.FolderManager {
         public void rename (string name) {
             try {
                 if (exists) {
-                    file.set_display_name (name);
+                    var recent_manager = Gtk.RecentManager.get_default ();
+                    var new_file = file.set_display_name (name);
+                    recent_manager.add_item (new_file.get_uri ());
+                    // Do not change existing file as this item will
+                    // be removed by its parent folder under that name
                 }
             } catch (GLib.Error error) {
                 warning (error.message);
